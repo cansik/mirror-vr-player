@@ -1,28 +1,22 @@
 package ch.zhdk.vr
 
 import io.ktor.application.call
+import io.ktor.http.cio.websocket.Frame
+import io.ktor.http.cio.websocket.readText
 import io.ktor.http.content.*
 import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
-import io.ktor.locations.get
 import io.ktor.response.respond
-import io.ktor.response.respondFile
-import io.ktor.response.respondText
 import io.ktor.routing.Route
+import io.ktor.routing.get
+import io.ktor.websocket.webSocket
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import kotlinx.coroutines.channels.SendChannel
 import java.io.File
-import java.io.FileInputStream
-import javax.print.DocFlavor
-import javax.print.SimpleDoc
-import javax.print.attribute.HashPrintRequestAttributeSet
-import javax.print.attribute.standard.Copies
+import java.util.concurrent.CopyOnWriteArrayList
 
 
 @KtorExperimentalLocationsAPI
-@Location("api/test/{id}/")
-data class TestRoute(val id: String)
-
-@KtorExperimentalLocationsAPI
-fun Route.vrPlayerRoutes() {
+fun Route.vrPlayerRoutes(channels: CopyOnWriteArrayList<SendChannel<Frame>>) {
 
     // webapp routes
     static("app/") {
@@ -42,7 +36,30 @@ fun Route.vrPlayerRoutes() {
     }
 
     // api routes
-    get<TestRoute> { id ->
-        call.respond("Test id was: $id")
+    get("api/player/") {
+        call.respond("Players Active: ${channels.size}")
+    }
+
+    webSocket("api/player") {
+        try {
+            channels.add(outgoing)
+
+            while (true) {
+                val message = (incoming.receive() as Frame.Text).readText()
+
+                println("[MSG $incoming]: $message")
+
+                // send message to all the others (broadcast)
+                channels.filter { it != outgoing }.forEach {
+                    it.send(Frame.Text(message))
+                }
+            }
+        } catch (e: ClosedReceiveChannelException) {
+            // Do nothing!
+        } catch (e: Throwable) {
+            e.printStackTrace()
+        } finally {
+            channels.remove(outgoing)
+        }
     }
 }
