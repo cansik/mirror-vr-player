@@ -47,7 +47,7 @@ fun Route.vrPlayerRoutes(channels: CopyOnWriteArrayList<SendChannel<Frame>>) {
             while (true) {
                 val message = (incoming.receive() as Frame.Text).readText()
 
-                println("[MSG $incoming]: $message")
+                println("[MSG]: $message")
 
                 // send message to all the others (broadcast)
                 channels.filter { it != outgoing }.forEach {
