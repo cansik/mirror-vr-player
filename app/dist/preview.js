@@ -1,6 +1,6 @@
 let maxDelta = 0.25;
 
-let options = { fluid: true };
+let options = {  };
 
 // delta label
 let deltaLabel = document.getElementById("delta-label");

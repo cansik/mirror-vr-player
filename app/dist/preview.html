@@ -11,21 +11,23 @@
 <body>
 
 <div class="content">
-    <video
-            id="video"
-            class="video-js vjs-default-skin vjs-big-play-centered"
-            controls
-            preload="auto"
-            data-setup='{}'>
-        <source src="assets/Dance2k.mp4" type="video/mp4"></source>
-        <p class="vjs-no-js">
-            To view this video please enable JavaScript, and consider upgrading to a
-            web browser that
-            <a href="https://videojs.com/html5-video-support/" target="_blank">
-                supports HTML5 video
-            </a>
-        </p>
-    </video>
+    <div class="video-container">
+        <video
+                id="video"
+                class="video-js vjs-default-skin vjs-big-play-centered vjs-fill"
+                controls
+                preload="auto"
+                data-setup='{}'>
+            <source src="assets/Dance2k.mp4" type="video/mp4"></source>
+            <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a
+                web browser that
+                <a href="https://videojs.com/html5-video-support/" target="_blank">
+                    supports HTML5 video
+                </a>
+            </p>
+        </video>
+    </div>
 
     <div class="center">
         <a id="play-button" class="button" href="#">Play</a>

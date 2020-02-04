@@ -1,7 +1,7 @@
 // web socket
 let socket = new WebSocket("ws://" + location.host + "/api/player/");
 
-var options = {fluid: true};
+var options = {};
 
 var player = videojs('video', options, function onPlayerReady() {
     this.vr({projection: '360', forceCardboard: true});
