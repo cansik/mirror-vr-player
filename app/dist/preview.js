@@ -1,10 +1,15 @@
-var options = { fluid: true };
+let maxDelta = 0.25;
+
+let options = { fluid: true };
+
+// delta label
+let deltaLabel = document.getElementById("delta-label");
 
 // web socket
 let socket = new WebSocket("ws://" + location.host + "/api/player/");
 
 // player
-var player = videojs('video', options, function onPlayerReady() {
+let player = videojs('video', options, function onPlayerReady() {
     videojs.log('Your player is ready!');
 
     // setup ui
@@ -16,6 +21,10 @@ var player = videojs('video', options, function onPlayerReady() {
     document.getElementById("pause-button").onclick = function () {
         socket.send("pause");
         this.pause();
+
+        // SEND Sync to other
+        let timeCode = player.currentTime();
+        socket.send(`sync ${timeCode} cold`);
     }.bind(this);
 
     document.getElementById("reset-button").onclick = function () {
@@ -59,8 +68,21 @@ socket.onmessage = function(event) {
 
     // sync command
     if (message.startsWith("sync")) {
-        let syncTime = parseFloat(message.split(" ")[1]);
-        player.currentTime(syncTime);
+        let tokens = message.split(" ");
+        let syncTime = parseFloat(tokens[1]);
+        let coldSync = tokens.length === 3;
+
+        // start if is not played and is not cold sync
+        if(!coldSync && player.paused()) {
+            player.play();
+        }
+
+        let delta = syncTime - player.currentTime();
+        deltaLabel.innerText = `Delta: ${Math.round((delta + Number.EPSILON) * 100) / 100}s`;
+
+        if(Math.abs(delta) > maxDelta)
+            player.currentTime(syncTime);
+
         return;
     }
 };

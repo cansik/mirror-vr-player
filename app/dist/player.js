@@ -45,3 +45,13 @@ socket.onclose = function (event) {
 socket.onerror = function (error) {
     console.log(`[error] ${error.message}`);
 };
+
+// sync interval
+setInterval(function () {
+    if(player.paused()) {
+        return;
+    }
+
+    let timeCode = player.currentTime();
+    socket.send(`sync ${timeCode}`);
+}, 1000);
