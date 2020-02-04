@@ -36,6 +36,9 @@ fun Route.vrPlayerRoutes() {
         static("assets") {
             files("assets")
         }
+        static("") {
+            files("")
+        }
     }
 
     // api routes

@@ -14,23 +14,35 @@ body {
 }
 
 .center {
-  margin: auto;
-  width: 50%;
-  border: 3px solid green;
-  padding: 10px;
+    margin: auto;
+    width: 50%;
+    height: 100%;
+    padding: 10px;
+    text-align: center;
 }
 
-#mainCanvas {
-    position: fixed;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    z-index: 5;
-    pointer-events: none;
+.button {
+    background-color: #5495af;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    margin: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.content {
+    width: 75%;
+    height: 75%;
 }
 
 #video-player {
     width: 100%;
     height: 100%;
+}
+
+.vjs-tech {
+    object-fit: cover;
 }

@@ -34,6 +34,9 @@ class VRPlayerServer {
             install(CallLogging)
             install(Locations)
             install(ConditionalHeaders)
+            install(PartialContent) {
+                maxRangeCount = 10
+            }
             install(Compression) {
                 default()
                 excludeContentType(ContentType.Video.Any)
