@@ -2,5 +2,5 @@ import "babel-polyfill";
 import {MasterPlayer} from './MasterPlayer';
 
 
-const profileViewer = new MasterPlayer();
-profileViewer.run();
+const masterPlayer = new MasterPlayer();
+masterPlayer.run();
