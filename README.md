@@ -5,6 +5,16 @@ The player itself is implemented with videojs and videojs-vr. The included webse
 
 ### Building & Running
 
+#### Kotlin Backend
+
 ```bash
 ./gradlew run
+```
+
+#### Node Backend
+
+```bash
+cd app
+npm install
+node index.js
 ```
