@@ -34,28 +34,35 @@ const wsServer = new webSocketServer({
 
 
 wsServer.on('request', function (request) {
-    console.log((new Date()) + ' Connection from origin '
-        + request.origin + '.');
-
     let connection = request.accept(null, request.origin);
     let index = clients.push(connection) - 1;
+
+    console.log((new Date()) + ' Connection #' + index + ' from origin ' + request.origin + ' (' + connection.remoteAddress + ')');
 
     // user sent some message
     connection.on('message', function (message) {
         if (message.type === 'utf8') { // accept only text
-            console.log((new Date()) + ' Received Message from ' + message.utf8Data);
+            console.log((new Date()) + '[MSG #' + index + ' c:' + clients.length + ']: ' + message.utf8Data);
 
             // broadcast message to all connected clients
             for (let i = 0; i < clients.length; i++) {
-                if(i !== index)
+                let client = clients[i];
+
+                if (client === connection) {
+                    continue;
+                }
+
+                try {
                     clients[i].sendUTF(message.utf8Data);
+                } catch (err) {
+                    console.log("could not send to " + i);
+                }
             }
         }
     });
     // user disconnected
     connection.on('close', function (connection) {
-        console.log((new Date()) + " Peer "
-            + connection.remoteAddress + " disconnected.");
+        console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
         clients.splice(index, 1);
     });
 });

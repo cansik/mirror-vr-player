@@ -7,6 +7,7 @@ var player = videojs('video', options, function onPlayerReady() {
     this.vr({projection: '360', forceCardboard: true});
 
     // start VR View
+    /*
     this.play();
     this.vr().handleVrDisplayActivate_();
 
@@ -14,6 +15,8 @@ var player = videojs('video', options, function onPlayerReady() {
         this.pause();
         this.currentTime(0);
         }.bind(this), 200);
+
+     */
 });
 
 // socket methods
